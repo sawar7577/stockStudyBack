@@ -28,10 +28,12 @@ module.exports = {
     async createStock(_, { ticker }, context) {
       const user = checkAuth(context);
       var price = [];
-      var prediction =  Array.from({length: 100}, () => Math.floor(Math.random()*3 -1));
+      var prediction = new Array(100).fill(0);
       var decisions = new Array(100).fill(0);
-      var correct = new Array(100).fill(0);
-
+      var timeStamp = new Array(100).fill(0);
+      var cprediction = new Array(100).fill(0);
+      var cdecisions = new Array(100).fill(0);
+      var money = new Array(100).fill(0);
       var yourApiKey = process.env.APIKEY;
       const alpha = require('alphavantage')({ key: yourApiKey });
       try{
@@ -47,11 +49,25 @@ module.exports = {
         }catch (err) {
           throw new Error(err);
         }
+        var p =  Math.floor(Math.random()*6) + 5;
+        var r = Array.from({length: p}, () => Math.floor(Math.random()*(80 - 49)) + 49);
+        for(var i=0; i<99; i++)
+        { 
+          prediction[i]= price[i+1]>=price[i] ? 1:0;
+        }
+        for(var i=0; i<p; i++)
+        { 
+          prediction[r[i]]=  prediction[r[i]]==0 ? 1:0;
+        }
+        
             const newStock = new Stock({
               closingPrice: price,
               prediction: prediction,
               decisions: decisions,
-              correct: correct,
+              timeStamp : timeStamp,
+              cprediction: cprediction,
+              cdecisions : cdecisions,
+              money : money,
               user: user.id,
               username: user.username,
               createdAt: new Date().toISOString()
@@ -59,10 +75,14 @@ module.exports = {
             const stock = await newStock.save();
             return stock;    
     },
-    async updateStock(_, {decisions, stockId }) {
+    async updateStock(_, {decisions, timeStamp, cprediction, cdecisions, money, stockId }) {
       try {
         const stock = await Stock.findById(stockId);
           stock.decisions = decisions ;
+          stock.timeStamp = timeStamp ;
+          stock.cprediction = cprediction ;
+          stock.cdecisions = cdecisions ;
+          stock.money = money ;
           await stock.save();
           return stock;
       } catch (err) {

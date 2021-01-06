@@ -8,6 +8,10 @@ module.exports = gql`
     closingPrice: [Float]!
     prediction: [Int]!
     decisions: [Int]!
+    timeStamp: [Int]!,
+    cprediction: [Int]!,
+    cdecisions: [Int]!,
+    money: [Float],
   }
   
   type User {
@@ -32,7 +36,12 @@ module.exports = gql`
     register(registerInput: RegisterInput): User!
     login(username: String!, password: String!): User!
     createStock(ticker: String!): Stock!
-    updateStock(stockId: ID!, decisions: [Int]!): Stock!
+    updateStock(stockId: ID!,
+      decisions: [Int]!, 
+      timeStamp: [Int]!,
+      cprediction: [Int]!,
+      cdecisions: [Int]!,
+      money: [Float],): Stock!
     deleteStock(stockId: ID!): String!
   }
 

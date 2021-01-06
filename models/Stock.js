@@ -6,6 +6,11 @@ const stockSchema = new Schema({
   closingPrice: [Number],
   prediction: [Number],
   decisions: [Number],
+  timeStart: Number,
+  timeStamp: [Number],
+  cprediction: [Number],
+  cdecisions: [Number],
+  money: [Number],
   user: {
     type: Schema.Types.ObjectId,
     ref: 'users'
