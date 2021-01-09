@@ -49,15 +49,25 @@ module.exports = {
         }catch (err) {
           throw new Error(err);
         }
-        var p =  Math.floor(Math.random()*6) + 5;
-        var r = Array.from({length: p}, () => Math.floor(Math.random()*(80 - 49)) + 49);
+        var p =  Math.floor(Math.random()* 11 ) + 0;
+        var r = new Array(100).fill(0);
+        for(var i=0; i<p; i++)
+        {
+            let n = Math.floor(Math.random()*(80 - 49)) + 49;
+            while(r[n]!=0)
+            {
+              n = Math.floor(Math.random()*(80 - 49)) + 49;
+            }
+            r[n]=1;
+        }
         for(var i=0; i<99; i++)
         { 
           prediction[i]= price[i+1]>=price[i] ? 1:0;
         }
-        for(var i=0; i<p; i++)
+        for(var i=49; i<=80; i++)
         { 
-          prediction[r[i]]=  prediction[r[i]]==0 ? 1:0;
+          if(r[i]==1)
+          prediction[i]=  prediction[i]==0 ? 1:0;
         }
         
             const newStock = new Stock({
