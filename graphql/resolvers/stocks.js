@@ -50,6 +50,7 @@ module.exports = {
           throw new Error(err);
         }
         var p =  Math.floor(Math.random()* 11 ) + 0;
+        p = 6;
         var r = new Array(100).fill(0);
         for(var i=0; i<p; i++)
         {
