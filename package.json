@@ -13,6 +13,7 @@
     "alpha-vantage-cli": "^1.0.8",
     "alphavantage": "^2.2.0",
     "apollo-server": "^2.19.0",
+    "array-normalize": "^2.0.0",
     "axios": "^0.21.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",

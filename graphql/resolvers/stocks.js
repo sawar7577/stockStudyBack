@@ -1,6 +1,7 @@
 const { AuthenticationError, UserInputError } = require('apollo-server');
 const Stock = require('../../models/Stock');
 const checkAuth = require('../../util/check-auth');
+const normalize = require('array-normalize');
 module.exports = {
   Query: {
     async getStocks() {
@@ -48,6 +49,11 @@ module.exports = {
           });
         }catch (err) {
           throw new Error(err);
+        }
+        normalize(price);
+        for(var i=0; i<99; i++)
+        { 
+          price[i]= price[i]*100;
         }
         var p =  Math.floor(Math.random()* 11 ) + 0;
         p = 6;
