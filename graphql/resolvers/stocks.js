@@ -53,7 +53,8 @@ module.exports = {
         normalize(price);
         for(var i=0; i<99; i++)
         { 
-          price[i]= price[i]*100;
+          let va = Math.round(price[i]*10000);
+          price[i]= va/100;
         }
         var p =  Math.floor(Math.random()* 11 ) + 0;
         p = 6;
