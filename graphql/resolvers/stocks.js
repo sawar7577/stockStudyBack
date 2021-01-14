@@ -61,10 +61,10 @@ module.exports = {
         var r = new Array(100).fill(0);
         for(var i=0; i<p; i++)
         {
-            let n = Math.floor(Math.random()*(80 - 49)) + 49;
+            let n = Math.floor(Math.random()*(80 - 50)) + 50;
             while(r[n]!=0)
             {
-              n = Math.floor(Math.random()*(80 - 49)) + 49;
+              n = Math.floor(Math.random()*(80 - 50)) + 50;
             }
             r[n]=1;
         }
