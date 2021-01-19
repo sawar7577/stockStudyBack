@@ -26,7 +26,7 @@ module.exports = {
     }
   },
   Mutation: {
-    async createStock(_, { ticker }, prob, context) {
+    async createStock(_, { ticker, prob}, context) {
       const user = checkAuth(context);
       var price = [];
       var prediction = new Array(100).fill(0);
@@ -57,7 +57,7 @@ module.exports = {
           price[i]= va/100;
         }
         //var p =  Math.floor(Math.random()* 11 ) + 0;
-        var p = prob === "80%"?6 : 9;
+        var p = prob === "80%" ? 6 : 9;
         var r = new Array(100).fill(0);
         for(var i=0; i<p; i++)
         {
