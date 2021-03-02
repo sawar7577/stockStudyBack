@@ -72,7 +72,7 @@ module.exports = {
             else
             {
               prediction[i]= 0;
-              predictedPrice[i] = max(10, price[i]-(price[i+1]-price[i])/2+(price[i+1]-price[i])*Math.random());
+              predictedPrice[i] = Math.max(10, price[i]-(price[i+1]-price[i])/2+(price[i+1]-price[i])*Math.random());
             }
           }
           else 
@@ -80,7 +80,7 @@ module.exports = {
             if(r<=p)
             {
             prediction[i]= 0;
-            predictedPrice[i] = max(10,price[i]+(price[i+1]-price[i])/2+(price[i+1]-price[i])*Math.random());
+            predictedPrice[i] = Math.max(10,price[i]+(price[i+1]-price[i])/2+(price[i+1]-price[i])*Math.random());
             }
             else
             {
