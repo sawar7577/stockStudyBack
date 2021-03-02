@@ -6,7 +6,6 @@ module.exports = gql`
     username: String!
     createdAt: String!
     closingPrice: [Float]!
-<<<<<<< HEAD
     predictedPrice: [Float]!
     prediction: [Int]!
     decisions: [Int]!
@@ -14,14 +13,6 @@ module.exports = gql`
     cprediction: [Int]!
     cdecisions: [Int]!
     money: [Float]
-=======
-    prediction: [Int]!
-    decisions: [Int]!
-    timeStamp: [Int]!,
-    cprediction: [Int]!,
-    cdecisions: [Int]!,
-    money: [Float],
->>>>>>> 0d981e191552715386a538164330bbe346877203
   }
   
   type User {
