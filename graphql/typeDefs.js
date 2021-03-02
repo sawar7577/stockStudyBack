@@ -6,6 +6,7 @@ module.exports = gql`
     username: String!
     createdAt: String!
     closingPrice: [Float]!
+<<<<<<< HEAD
     predictedPrice: [Float]!
     prediction: [Int]!
     decisions: [Int]!
@@ -13,6 +14,14 @@ module.exports = gql`
     cprediction: [Int]!
     cdecisions: [Int]!
     money: [Float]
+=======
+    prediction: [Int]!
+    decisions: [Int]!
+    timeStamp: [Int]!,
+    cprediction: [Int]!,
+    cdecisions: [Int]!,
+    money: [Float],
+>>>>>>> 0d981e191552715386a538164330bbe346877203
   }
   
   type User {
@@ -36,7 +45,11 @@ module.exports = gql`
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(username: String!, password: String!): User!
+<<<<<<< HEAD
     createStock(ticker: String!, prob: String!): Stock!
+=======
+    createStock(ticker: String!): Stock!
+>>>>>>> 0d981e191552715386a538164330bbe346877203
     updateStock(stockId: ID!,
       decisions: [Int]!, 
       timeStamp: [Int]!,
