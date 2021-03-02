@@ -12,25 +12,15 @@
   "dependencies": {
     "alpha-vantage-cli": "^1.0.8",
     "alphavantage": "^2.2.0",
-<<<<<<< HEAD
     "apollo-server": "^2.19.1",
     "array-normalize": "^2.0.0",
     "axios": "^0.21.1",
-=======
-    "apollo-server": "^2.19.0",
-    "array-normalize": "^2.0.0",
-    "axios": "^0.21.0",
->>>>>>> 0d981e191552715386a538164330bbe346877203
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "graphql": "^14.7.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
-<<<<<<< HEAD
     "mongoose": "^5.11.11",
-=======
-    "mongoose": "^5.10.15",
->>>>>>> 0d981e191552715386a538164330bbe346877203
     "react-router-dom": "^5.2.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.87.3"
