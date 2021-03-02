@@ -36,11 +36,7 @@ module.exports = gql`
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(username: String!, password: String!): User!
-<<<<<<< HEAD
     createStock(ticker: String!, prob: String!): Stock!
-=======
-    createStock(ticker: String!): Stock!
->>>>>>> 0d981e191552715386a538164330bbe346877203
     updateStock(stockId: ID!,
       decisions: [Int]!, 
       timeStamp: [Int]!,
