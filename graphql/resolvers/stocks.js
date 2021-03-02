@@ -30,6 +30,7 @@ module.exports = {
       const user = checkAuth(context);
       var price = [];
       var prediction = new Array(100).fill(0);
+      var predictedPrice = new Array(100).fill(0);
       var decisions = new Array(100).fill(0);
       var timeStamp = new Array(100).fill(0);
       var cprediction = new Array(100).fill(0);
@@ -54,32 +55,44 @@ module.exports = {
         for(var i=0; i<99; i++)
         { 
           let va = Math.round(price[i]*10000);
-          price[i]= va/100;
+          price[i]= va/10;
         }
-        //var p =  Math.floor(Math.random()* 11 ) + 0;
-        var p = prob === "80%" ? 6 : 9;
-        var r = new Array(100).fill(0);
-        for(var i=0; i<p; i++)
-        {
-            let n = Math.floor(Math.random()*(79 - 49)) + 49;
-            while(r[n]!=0)
-            {
-              n = Math.floor(Math.random()*(79 - 49)) + 49;
-            }
-            r[n]=1;
-        }
-        for(var i=0; i<99; i++)
-        { 
-          prediction[i]= price[i+1]>=price[i] ? 1:0;
-        }
+        var p = prob === "80%" ? 0.8 : 0.7;
+        
         for(var i=49; i<=80; i++)
         { 
-          if(r[i]==1)
-          prediction[i]=  prediction[i]==0 ? 1:0;
+          var r = Math.random();
+          if(price[i+1]>=price[i])
+          {
+            if(r<=p)
+            {
+            prediction[i]= 1;
+            predictedPrice[i] = price[i]+(price[i+1]-price[i])/2+(price[i+1]-price[i])*Math.random();
+            }
+            else
+            {
+              prediction[i]= 0;
+              predictedPrice[i] = max(10, price[i]-(price[i+1]-price[i])/2+(price[i+1]-price[i])*Math.random());
+            }
+          }
+          else 
+          {
+            if(r<=p)
+            {
+            prediction[i]= 0;
+            predictedPrice[i] = max(10,price[i]+(price[i+1]-price[i])/2+(price[i+1]-price[i])*Math.random());
+            }
+            else
+            {
+              prediction[i]= 1;
+              predictedPrice[i] =  price[i]-(price[i+1]-price[i])/2+(price[i+1]-price[i])*Math.random();
+            }
+          }
         }
         
             const newStock = new Stock({
               closingPrice: price,
+              predictedPrice: predictedPrice,
               prediction: prediction,
               decisions: decisions,
               timeStamp : timeStamp,

@@ -4,6 +4,7 @@ const stockSchema = new Schema({
   username: String,
   createdAt: String,
   closingPrice: [Number],
+  predictedPrice: [Number],
   prediction: [Number],
   decisions: [Number],
   timeStart: Number,
