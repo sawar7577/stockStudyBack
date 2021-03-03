@@ -12,6 +12,7 @@ module.exports = gql`
     timeStamp: [Int]!
     cprediction: [Int]!
     cdecisions: [Int]!
+    prob: String!
     money: [Float]
   }
   

@@ -101,7 +101,8 @@ module.exports = {
               money : money,
               user: user.id,
               username: user.username,
-              createdAt: new Date().toISOString()
+              createdAt: new Date().toISOString(),
+              prob:prob
             });
             const stock = await newStock.save();
             return stock;    

@@ -12,6 +12,7 @@ const stockSchema = new Schema({
   cprediction: [Number],
   cdecisions: [Number],
   money: [Number],
+  prob: String,
   user: {
     type: Schema.Types.ObjectId,
     ref: 'users'
