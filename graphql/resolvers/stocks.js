@@ -1,7 +1,13 @@
 const { AuthenticationError, UserInputError } = require('apollo-server');
 const Stock = require('../../models/Stock');
+const News = require('../../models/News');
+const Participant = require('../../models/Participant');
+
 const checkAuth = require('../../util/check-auth');
+// const controlNews = require('../../util/news');
 const normalize = require('array-normalize');
+
+
 module.exports = {
   Query: {
     async getStocks() {
@@ -15,7 +21,11 @@ module.exports = {
     async getStock(_, { stockId }) {
       try {
         const stock = await Stock.findById(stockId);
+        // const news = await News.find();
+        console.log("stock-->", stock);
+        
         if (stock) {
+          // stock.news = news;
           return stock;
         } else {
           throw new Error('Stock not found');
@@ -27,95 +37,79 @@ module.exports = {
   },
   Mutation: {
     async createStock(_, { ticker, prob}, context) {
+      console.log(ticker, prob);
       const user = checkAuth(context);
-      var price = [];
-      var prediction = new Array(100).fill(0);
-      var predictedPrice = new Array(100).fill(0);
+      var price = new Array(100).fill(0);
+      // var news = controlNews;
+      var news = await News.find();
+      var pnews = await Participant.findOne({status: "New"});
+
+      // var newsString = [];
+      // var newsPrice = [];
+      // for(let i = 0 ; i < news.length ; ++i) {
+      //   newsString.push(news[i].newsText);
+      //   newsPrice.push(news[i].priceEffect);
+
+      // }
+      // const n =  await News.
+      console.log(news);
       var decisions = new Array(100).fill(0);
       var timeStamp = new Array(100).fill(0);
-      var cprediction = new Array(100).fill(0);
       var cdecisions = new Array(100).fill(0);
       var money = new Array(100).fill(0);
-      var yourApiKey = process.env.APIKEY;
-      const alpha = require('alphavantage')({ key: yourApiKey });
-      try{
-       await alpha.data.daily(ticker, 'compact', 'json', 'daily')
-          .then(data => {
-            var l = require('lodash');
-            l.forEach(data['Time Series (Daily)'], function(value, key) {
-              price.push(Number(value['4. close']));
-            })
-          }).catch(err => {
-              console.error(err);
-          });
-        }catch (err) {
-          throw new Error(err);
-        }
-        normalize(price);
-        for(var i=0; i<99; i++)
-        { 
-          let va = Math.round(price[i]*10000);
-          price[i]= va/10;
-        }
-        var p = prob === "80%" ? 0.8 : 0.7;
+      // var yourApiKey = process.env.APIKEY;
+      // const alpha = require('alphavantage')({ key: yourApiKey });
+      // try{
+      //  await alpha.data.daily(ticker, 'compact', 'json', 'daily')
+      //     .then(data => {
+      //       var l = require('lodash');
+      //       l.forEach(data['Time Series (Daily)'], function(value, key) {
+      //         price.push(Number(value['4. close']));
+      //       })
+      //     }).catch(err => {
+      //         console.error(err);
+      //     });
+      //   }catch (err) {
+      //     throw new Error(err);
+      //   }
         
-        for(var i=49; i<=80; i++)
-        { 
-          var r = Math.random();
-          if(price[i+1]>=price[i])
-          {
-            if(r<=p)
-            {
-            prediction[i]= 1;
-            predictedPrice[i] = price[i]+(price[i+1]-price[i])/2+(price[i+1]-price[i])*Math.random();
-            }
-            else
-            {
-              prediction[i]= 0;
-              predictedPrice[i] = Math.max(10, price[i]-(price[i+1]-price[i])/2-(price[i+1]-price[i])*Math.random());
-            }
-          }
-          else 
-          {
-            if(r<=p)
-            {
-            prediction[i]= 0;
-            predictedPrice[i] = Math.max(10,price[i]+(price[i+1]-price[i])/2+(price[i+1]-price[i])*Math.random());
-            }
-            else
-            {
-              prediction[i]= 1;
-              predictedPrice[i] =  price[i]-(price[i+1]-price[i])/2-(price[i+1]-price[i])*Math.random();
-            }
-          }
-        }
         
             const newStock = new Stock({
+              status: "InProgress",
               closingPrice: price,
-              predictedPrice: predictedPrice,
-              prediction: prediction,
-              decisions: decisions,
+              // decisions: decisions,
               timeStamp : timeStamp,
-              cprediction: cprediction,
+              news: news,
+              participantInfo: pnews,
+              // news: newsString,
+              // priceEffect: newsPrice,
               cdecisions : cdecisions,
               money : money,
               user: user.id,
               username: user.username,
               createdAt: new Date().toISOString(),
-              prob:prob
             });
+            console.log(newStock);
             const stock = await newStock.save();
+            console.log("stockkk", stock);
             return stock;    
     },
-    async updateStock(_, {decisions, timeStamp, cprediction, cdecisions, money, stockId }) {
+    async updateStock(_, {timeStamp, cdecisions, money, stockId }) {
       try {
+        console.log("updateing stock")
         const stock = await Stock.findById(stockId);
-          stock.decisions = decisions ;
+          // stock.decisions = decisions ;
           stock.timeStamp = timeStamp ;
-          stock.cprediction = cprediction ;
           stock.cdecisions = cdecisions ;
           stock.money = money ;
+          stock.status = "Completed";
+          // console.log("update stock", stock);
           await stock.save();
+
+        const participant = await Participant.findById(stock.participantInfo.id);
+        participant.status = "Completed";
+        await participant.save();
+
           return stock;
       } catch (err) {
         throw new Error(err);

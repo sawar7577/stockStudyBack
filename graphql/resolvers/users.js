@@ -44,7 +44,7 @@ module.exports = {
       }
 
       const token = generateToken(user);
-
+      console.log("user logged in");
       return {
         ...user._doc,
         id: user._id,
@@ -87,7 +87,7 @@ module.exports = {
       const res = await newUser.save();
 
       const token = generateToken(res);
-
+      console.log("user registered");
       return {
         ...res._doc,
         id: res._id,
