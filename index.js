@@ -82,12 +82,17 @@ function shuffle(array) {
 
 // console.log(News.schema);
 
+const corsOptions = {
+  origin: '*',
+  credentials: true
+}
 
 async function startApolloServer() {
   const app = express();
-  app.use(cors({
-    	origin: '*',			// <- allow request from all domains
-    	credentials: true}));
+//   app.use(cors({
+//     	origin: '*',			// <- allow request from all domains
+//     	credentials: true}));
+  app.use(cors());
   const pubsub = new PubSub();
   const PORT = process.env.PORT || 5000
   const server = new ApolloServer({
@@ -100,7 +105,7 @@ async function startApolloServer() {
   });
   
   await server.start();
-  server.applyMiddleware({ app, path: '/', cors: false });
+  server.applyMiddleware({ app, path: '/', cors: corsOptions);
   mongoose
   .connect(process.env.MONGODB, { useNewUrlParser: true })
   .then(() => {
