@@ -85,20 +85,22 @@ function shuffle(array) {
 
 async function startApolloServer() {
   const app = express();
-  app.use(cors());
+  app.use(cors({
+    	origin: '*',			// <- allow request from all domains
+    	credentials: true}));
   const pubsub = new PubSub();
   const PORT = process.env.PORT || 5000
   const server = new ApolloServer({
-    cors: {
-    	origin: '*',			// <- allow request from all domains
-    	credentials: true},
+//     cors: {
+//     	origin: '*',			// <- allow request from all domains
+//     	credentials: true},
     typeDefs,
     resolvers,
     context: ({ req }) => ({ req, pubsub })
   });
   
   await server.start();
-  server.applyMiddleware({ app, path: '/' });
+  server.applyMiddleware({ app, path: '/', cors: false });
   mongoose
   .connect(process.env.MONGODB, { useNewUrlParser: true })
   .then(() => {
