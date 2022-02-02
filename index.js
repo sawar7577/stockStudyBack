@@ -1,4 +1,7 @@
-const { ApolloServer, PubSub } = require('apollo-server');
+const { ApolloServer} = require('apollo-server-express');
+const {PubSub } = require('apollo-server');
+
+
 const mongoose = require('mongoose');
 require('dotenv').config();
 const typeDefs = require('./graphql/typeDefs');
@@ -6,6 +9,12 @@ const resolvers = require('./graphql/resolvers');
 const News = require('./models/News');
 const Counter = require('./models/Counter');
 const Participant = require('./models/Participant');
+
+const cors = require('cors')
+
+const express = require('express');
+//create instance of express
+
 
 function shuffle(array) {
   let currentIndex = array.length,  randomIndex;
@@ -72,21 +81,39 @@ function shuffle(array) {
 
 
 // console.log(News.schema);
-const pubsub = new PubSub();
-const PORT = process.env.PORT || 5000
-const server = new ApolloServer({
-  cors: false,
-  typeDefs,
-  resolvers,
-  context: ({ req }) => ({ req, pubsub })
-});
 
-mongoose
+
+async function startApolloServer() {
+  const app = express();
+  app.use(cors());
+  const pubsub = new PubSub();
+  const PORT = process.env.PORT || 5000
+  const server = new ApolloServer({
+    // cors: {
+    // 	origin: '*',			// <- allow request from all domains
+    // 	credentials: true},
+    typeDefs,
+    resolvers,
+    context: ({ req }) => ({ req, pubsub })
+  });
+  
+  await server.start();
+  server.applyMiddleware({ app, path: '/' });
+  mongoose
   .connect(process.env.MONGODB, { useNewUrlParser: true })
   .then(() => {
     console.log('MongoDB Connected');
-    return server.listen({ port: PORT });
-  })
-  .then((res) => {
-    console.log(`Server running at ${res.url}`);
+    // server.listen({port: PORT}, () => console.log(`Server running at http://localhost:${PORT}`));
+    // return app.listen({ port: PORT });
   });
+
+  app.listen({port: PORT}, () => console.log(`Server running at http://localhost:${PORT}`));
+  
+  // .then((res) => {
+  //   console.log(`Server running at ${res.url}`);
+  // });
+  
+}
+
+startApolloServer();
+
