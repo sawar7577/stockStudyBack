@@ -75,9 +75,7 @@ function shuffle(array) {
 const pubsub = new PubSub();
 const PORT = process.env.PORT || 5000
 const server = new ApolloServer({
-  cors: {
-		origin: '*',			// <- allow request from all domains
-		credentials: true},
+  cors: false,
   typeDefs,
   resolvers,
   context: ({ req }) => ({ req, pubsub })
