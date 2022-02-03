@@ -105,7 +105,7 @@ async function startApolloServer() {
   });
   
   await server.start();
-  server.applyMiddleware({ app, path: '/', cors: corsOptions);
+  server.applyMiddleware({ app, path: '/', cors: corsOptions});
   mongoose
   .connect(process.env.MONGODB, { useNewUrlParser: true })
   .then(() => {
